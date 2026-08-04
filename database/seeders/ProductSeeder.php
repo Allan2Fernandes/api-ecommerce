@@ -5,10 +5,15 @@ namespace Database\Seeders;
 use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Database\Seeder;
-use Log;
 
 class ProductSeeder extends Seeder
 {
+    /**
+     * Number of products to create at each depth level.
+     * Index 0 = root, 1 = second level, etc.
+     */
+    private const PRODUCTS_PER_LEVEL = [5, 10, 15, 8];
+
     /**
      * Run the database seeds.
      */
@@ -16,49 +21,97 @@ class ProductSeeder extends Seeder
     {
         $tree = [
             'Electronics' => [
-                'Laptops' => ['Gaming Laptops', 'Ultrabooks', 'Chromebooks'],
-                'Phones' => ['Smartphones', 'Feature Phones'],
-                'Audio' => ['Headphones', 'Speakers', 'Earbuds'],
+                'Laptops' => [
+                    'Gaming Laptops' => [
+                        '15-inch' => [
+                            'Alienware Laptops' => [], 
+                            'LG Laptops' => [],
+                            'Samsung Laptops' => []
+                        ],
+                        '17-inch' => [],
+                    ],
+                    'Ultrabooks' => [],
+                    'Chromebooks' => [],
+                ],
+                'Phones' => [
+                    'Smartphones' => [
+                        'Android' => [],
+                        'iOS' => [],
+                    ],
+                    'Feature Phones' => [],
+                ],
+                'Audio' => [
+                    'Headphones' => [],
+                    'Speakers' => [],
+                    'Earbuds' => [],
+                ],
             ],
             'Clothing' => [
-                "Men's" => ['Shirts', 'Trousers', 'Outerwear'],
-                "Women's" => ['Dresses', 'Tops', 'Outerwear'],
-                'Kids' => ['Boys', 'Girls'],
+                "Men's" => [
+                    'Shirts' => [],
+                    'Trousers' => [],
+                    'Outerwear' => [],
+                ],
+                "Women's" => [
+                    'Dresses' => [],
+                    'Tops' => [],
+                    'Outerwear' => [],
+                ],
+                'Kids' => [
+                    'Boys' => [],
+                    'Girls' => [],
+                ],
             ],
             'Home & Garden' => [
-                'Furniture' => ['Sofas', 'Tables', 'Chairs'],
-                'Kitchen' => ['Cookware', 'Appliances'],
+                'Furniture' => [
+                    'Sofas' => [],
+                    'Tables' => [],
+                    'Chairs' => [],
+                ],
+                'Kitchen' => [
+                    'Cookware' => [],
+                    'Appliances' => [],
+                ],
             ],
         ];
 
-        foreach ($tree as $rootName => $midCategories) {
-            $root = Category::factory()->create(['name' => $rootName]);
-
-            // Attach a handful of products directly to the root category too
-            Product::factory()
-                ->count(5)
-                ->forCategory($root)
-                ->create();
-
-            foreach ($midCategories as $midName => $leafCategories) {
-                $mid = Category::factory()->childOf($root)->create(['name' => $midName]);
-
-                // Products attached at the mid tier
-                Product::factory()
-                    ->count(10)
-                    ->forCategory($mid)
-                    ->create();
-
-                foreach ($leafCategories as $leafName) {
-                    $leaf = Category::factory()->childOf($mid)->create(['name' => $leafName]);
-
-                    // Products attached at the leaf tier
-                    Product::factory()
-                        ->count(15)
-                        ->forCategory($leaf)
-                        ->create();
-                }
-            }
+        foreach ($tree as $rootName => $children) {
+            $this->seedCategoryTree($rootName, null, $children, 0);
         }
+    }
+
+    /**
+     * Recursively create a category, attach products to it,
+     * and seed its children.
+     *
+     * @param  string  $name  Name of the category to create
+     * @param  Category|null  $parent  Parent category, or null for a root
+     * @param  array  $children  Subtree of child categories
+     * @param  int  $depth  Current depth, used to vary product count per level
+     */
+    private function seedCategoryTree(string $name, ?Category $parent, array $children, int $depth): void
+    {
+        $category = $parent
+            ? Category::factory()->childOf($parent)->create(['name' => $name])
+            : Category::factory()->create(['name' => $name]);
+
+        Product::factory()
+            ->count($this->productCountForDepth($depth))
+            ->forCategory($category)
+            ->create();
+
+        foreach ($children as $childName => $grandchildren) {
+            $this->seedCategoryTree($childName, $category, $grandchildren, $depth + 1);
+        }
+    }
+
+    /**
+     * Get the number of products to seed at a given depth,
+     * falling back to the last defined value for deeper levels.
+     */
+    private function productCountForDepth(int $depth): int
+    {
+        return self::PRODUCTS_PER_LEVEL[$depth]
+            ?? self::PRODUCTS_PER_LEVEL[array_key_last(self::PRODUCTS_PER_LEVEL)];
     }
 }
