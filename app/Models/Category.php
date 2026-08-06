@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 
 class Category extends Model
 {
@@ -47,9 +48,11 @@ class Category extends Model
         return $this->belongsTo(Category::class, 'parent_id');
     }
 
-    /**
-     * Get the child categories.
-     */
+    public function parent_nested(): BelongsTo
+    {
+        return $this->parent()->with('parent_nested');
+    }
+
     public function children(): HasMany
     {
         return $this->hasMany(Category::class, 'parent_id');
@@ -61,5 +64,10 @@ class Category extends Model
     public function products(): HasMany
     {
         return $this->hasMany(Product::class);
+    }
+
+    public function images(): MorphMany
+    {
+        return $this->morphMany(Image::class, 'imageable');
     }
 }
