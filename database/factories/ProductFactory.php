@@ -17,7 +17,6 @@ class ProductFactory extends Factory
             'id' => (string) Str::uuid(),
             'name' => ucfirst($this->faker->words(3, true)),
             'description' => $this->faker->paragraph(),
-            'category_id' => Category::factory(), // auto-creates a category if none given
         ];
     }
 

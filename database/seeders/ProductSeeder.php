@@ -3,6 +3,7 @@
 namespace Database\Seeders;
 
 use App\Models\Category;
+use App\Models\Image;
 use App\Models\Product;
 use Illuminate\Database\Seeder;
 
@@ -47,17 +48,17 @@ class ProductSeeder extends Seeder
                 ],
             ],
             'Clothing' => [
-                "Men's" => [
+                "Men's Clothing" => [
                     'Shirts' => [],
                     'Trousers' => [],
-                    'Outerwear' => [],
+                    "Men's Outerwear" => [],
                 ],
-                "Women's" => [
+                "Women's Clothing" => [
                     'Dresses' => [],
                     'Tops' => [],
-                    'Outerwear' => [],
+                    "Women's Outerwear" => [],
                 ],
-                'Kids' => [
+                "Kid's Clothing" => [
                     'Boys' => [],
                     'Girls' => [],
                 ],
@@ -95,10 +96,17 @@ class ProductSeeder extends Seeder
             ? Category::factory()->childOf($parent)->create(['name' => $name])
             : Category::factory()->create(['name' => $name]);
 
-        Product::factory()
+        $products = Product::factory()
             ->count($this->productCountForDepth($depth))
             ->forCategory($category)
             ->create();
+
+        foreach($products as $product) {
+            Image::factory()->count(rand(5,15))->forProduct($product, $category)->create([
+                'imageable_id' => $product->id,
+                'imageable_type' => Product::class,
+            ]);
+        }    
 
         foreach ($children as $childName => $grandchildren) {
             $this->seedCategoryTree($childName, $category, $grandchildren, $depth + 1);
