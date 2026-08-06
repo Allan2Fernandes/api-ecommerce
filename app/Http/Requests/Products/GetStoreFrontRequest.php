@@ -1,11 +1,12 @@
 <?php
 
-namespace App\Http\Requests\products;
+namespace App\Http\Requests\Products;
 
+use App\Data\GetStoreFrontData;
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 
-class GetProductsRequest extends FormRequest
+class GetStoreFrontRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,8 +23,6 @@ class GetProductsRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
-            //
-        ];
+        return GetStoreFrontData::rules();
     }
 }

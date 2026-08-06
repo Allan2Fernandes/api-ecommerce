@@ -18,8 +18,8 @@ class GetStoreFrontProductsAction
         $this->productRepositoryInterface = $productRepositoryInterface;
     }
 
-    public function handle(): Collection
+    public function handle(int $limit): Collection
     {
-        return $this->productRepositoryInterface->GetProducts()->groupBy('category_id');
+        return $this->productRepositoryInterface->GetProducts($limit)->groupBy('category_id');
     }
 }
