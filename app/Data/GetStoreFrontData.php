@@ -14,7 +14,7 @@ class GetStoreFrontData extends Data
     public static function rules(ValidationContext $context = null): array
     {
         return [
-            'limit' => ['integer']
+            'limit' => ['integer', 'min:1', 'max:100']
         ];
     }
 }
