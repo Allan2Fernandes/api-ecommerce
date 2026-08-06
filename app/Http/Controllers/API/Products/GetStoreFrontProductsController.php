@@ -16,11 +16,9 @@ class GetStoreFrontProductsController extends Controller
      */
     public function __invoke(GetStoreFrontRequest $request): JsonResponse
     {
-        $limit = 50;
         $data = GetStoreFrontData::from($request->validated());
-        if($limit) {
-            $limit = $data->limit;
-        }
+        $limit = $data->limit;
+ 
         return new JsonResponse(GetStoreFrontProductsAction::run($limit));
     }
 }
