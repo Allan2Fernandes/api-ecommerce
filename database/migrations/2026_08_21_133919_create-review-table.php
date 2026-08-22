@@ -15,14 +15,14 @@ return new class extends Migration
             $table->uuid('id')->primary();
             $table->string('title');
             $table->text('explanation');
+            $table->integer('rating');
             $table->foreignUuid('user_id')
-                ->after('id')
                 ->constrained('users')
                 ->restrictOnDelete();
             $table->foreignUuid('product_id')
-                ->after('id')
-                ->constrained('product')
+                ->constrained('products')
                 ->restrictOnDelete();
+            $table->timestamps();
         });
     }
 
