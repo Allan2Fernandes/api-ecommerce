@@ -18,7 +18,7 @@ class ProductRepository implements ProductRepositoryInterface {
 
     public function GetProduct(string $productid): Product
     {
-        return Product::with(['category.parent_nested', 'images:id,url,imageable_id'])->findOrFail($productid);
+        return Product::with(['category.parent_nested', 'images:id,url,imageable_id', 'reviews:id,title,explanation,rating,product_id,user_id', 'reviews.reviewer:id,name' ])->findOrFail($productid);
     }
 }
 
