@@ -8,7 +8,7 @@ use Illuminate\Support\Collection;
 class ProductRepository implements ProductRepositoryInterface {
     public function GetProducts(int $limit): Collection {
         return Product::query()
-        ->select(['id', 'name', 'category_id', 'description'])
+        ->select(['id', 'name', 'category_id', 'description', 'price'])
         ->with(['category:id,name,parent_id', 'images:id,url,imageable_id', 'reviews:id,rating,product_id'])
         ->get()
         ->groupBy('category_id')

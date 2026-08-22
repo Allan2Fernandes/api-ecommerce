@@ -17,6 +17,7 @@ class ProductFactory extends Factory
             'id' => (string) Str::uuid(),
             'name' => ucfirst($this->faker->words(3, true)),
             'description' => $this->faker->paragraph(),
+            'price' => $this->faker->randomFloat(2, 500, 2000),
         ];
     }
 
