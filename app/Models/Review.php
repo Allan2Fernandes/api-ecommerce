@@ -5,10 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
-use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Database\Eloquent\Relations\MorphMany;
 
-class Product extends Model
+class Review extends Model
 {
     use HasFactory;
     protected $keyType = 'string';
@@ -21,9 +19,11 @@ class Product extends Model
      */
     protected $fillable = [
         'id',
-        'name',
-        'description',
-        'category_id',
+        'title',
+        'explanation',
+        'rating',
+        'product_id',
+        'user_id',
     ];
 
     /**
@@ -44,18 +44,13 @@ class Product extends Model
         return [];
     }
 
-    public function category(): BelongsTo
+    public function product(): BelongsTo
     {
-        return $this->belongsTo(Category::class);
+        return $this->belongsTo(Product::class, 'product_id');
     }
 
-    public function images(): MorphMany
+    public function reviewer(): BelongsTo
     {
-        return $this->morphMany(Image::class, 'imageable');
-    }
-
-    public function reviews(): HasMany
-    {
-        return $this->hasMany(Review::class);
+        return $this->belongsTo(User::class, 'user_id');
     }
 }
