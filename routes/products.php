@@ -1,11 +1,7 @@
 <?php
 
-
 use App\Http\Controllers\API\Products\GetProductController;
 use App\Http\Controllers\API\Products\GetStoreFrontProductsController;
-
-
-
 
 Route::prefix('products')
 ->group(function () {
