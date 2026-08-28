@@ -14,6 +14,6 @@ class WishlistSeeder extends Seeder
     public function run(): void
     {
         $users = User::all();
-        Wishlist::factory()->count(50)->recycle($users)->create();
+        Wishlist::factory()->count(200)->recycle($users)->create();
     }
 }

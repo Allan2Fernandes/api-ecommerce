@@ -12,4 +12,6 @@ interface WishlistRepositoryInterface {
      * @return Collection<Wishlist>
      */
     public function GetWishlists(string $user_id): Collection;
+
+    public function DeleteWishlist(string $wishlist_id): void;
 }
