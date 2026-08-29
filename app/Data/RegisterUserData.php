@@ -7,7 +7,7 @@ use Spatie\LaravelData\Support\Validation\ValidationContext;
 
 class RegisterUserData extends Data
 {
-        public function __construct(
+    public function __construct(
         public string $name,
         public string $email,
         public string $password,

@@ -6,7 +6,6 @@ use App\Http\Controllers\API\UserRegistrationController;
 use App\Http\Controllers\API\LoginController;
 use App\Http\Middleware\CorsMiddleware;
 
-
 Route::prefix('auth')
 ->group(function () {
     Route::post('register', UserRegistrationController::class);
