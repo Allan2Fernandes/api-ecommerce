@@ -3,6 +3,7 @@
 namespace App\Contracts;
 
 use App\Data\CreateWishlistData;
+use App\Data\EditWishlistData;
 use Illuminate\Support\Collection;
 use App\Models\Wishlist;
 
@@ -17,4 +18,6 @@ interface WishlistRepositoryInterface {
     public function DeleteWishlist(string $wishlist_id): void;
 
     public function CreateWishlist(CreateWishlistData $data): Wishlist;
+
+    public function EditWishlist(string $id, EditWishlistData $data): Wishlist;
 }

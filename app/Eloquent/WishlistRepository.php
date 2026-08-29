@@ -4,6 +4,7 @@ namespace App\Eloquent;
 
 use App\Contracts\WishlistRepositoryInterface;
 use App\Data\CreateWishlistData;
+use App\Data\EditWishlistData;
 use App\Models\Wishlist;
 use App\Models\WishlistItem;
 use \Illuminate\Support\Collection;
@@ -25,5 +26,12 @@ class WishlistRepository implements WishlistRepositoryInterface {
         Wishlist::create(array_merge($data->toArray(), ['id' => $id]));
         $wishlist = Wishlist::query()->where('id', $id)->select(['id', 'title', 'user_id'])->with(['products:id,name,description,price', 'products.images:id,url,imageable_id'])->firstOrFail();
         return $wishlist;
+    }
+
+    public function EditWishlist(string $id, EditWishlistData $data): Wishlist {
+        $wishlistToUpdate = Wishlist::query()->where('id', $id)->select(['id', 'title', 'user_id'])->with(['products:id,name,description,price', 'products.images:id,url,imageable_id'])->firstOrFail();
+        $wishlistToUpdate->title = $data->title;
+        $wishlistToUpdate->save();
+        return $wishlistToUpdate;
     }
 }
