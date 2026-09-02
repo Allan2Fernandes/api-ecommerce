@@ -12,7 +12,6 @@ Route::prefix('auth')
     Route::post('login', LoginController::class);
 
     Route::middleware('auth:sanctum')->group(function () {
-        Route::get('user', [AuthenticationController::class, 'userInfo']);
         Route::post('logout', LogoutController::class);
     });
 });
