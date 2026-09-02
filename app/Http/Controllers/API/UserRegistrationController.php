@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Actions\UserRegistrationAction;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Hash;
@@ -16,7 +17,7 @@ class UserRegistrationController extends Controller
     public function __invoke(RegisterUserRequest $request): JsonResponse
     {
         $data = RegisterUserData::from($request->validated());
-        User::create(array_merge($data->toArray(), ['id' => (string)Str::uuid()]));
+        UserRegistrationAction::run($data);
 
         return response()->json(['message' => 'User registered successfully']);
     }

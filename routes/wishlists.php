@@ -8,7 +8,7 @@ use App\Http\Controllers\API\Wishlists\GetWishlistsController;
 
 Route::prefix('wishlists')
 ->group(function () {
-    Route::middleware('auth:sanctum')->group(function () {
+    Route::middleware(['auth:sanctum', 'token-extension'])->group(function () {
         Route::get('/', GetWishlistsController::class);
         Route::post('/', CreateWishlistController::class);
         Route::patch('/{id}', EditWishlistController::class);
