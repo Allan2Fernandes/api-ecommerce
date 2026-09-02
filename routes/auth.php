@@ -1,10 +1,8 @@
 <?php
 
-use App\Http\Controllers\API\AuthenticationController;
 use App\Http\Controllers\API\LogoutController;
 use App\Http\Controllers\API\UserRegistrationController;
 use App\Http\Controllers\API\LoginController;
-use App\Http\Middleware\CorsMiddleware;
 
 Route::prefix('auth')
 ->group(function () {
